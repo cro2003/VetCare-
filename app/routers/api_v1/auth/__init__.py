@@ -1,0 +1,1 @@
+from app.routers.api_v1.auth.auth import auth_route

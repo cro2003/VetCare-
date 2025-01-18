@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.middleware import ResponseTime
 from app.routers import home_router
+from app.routers.api_v1.auth import auth_route
 
 
 def get_app():
