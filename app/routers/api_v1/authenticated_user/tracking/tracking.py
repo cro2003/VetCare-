@@ -68,3 +68,46 @@ async def get_daily_tracking(user: Annotated[getAuthenticatedUser, Depends()], p
         "daily_tracking": data
     }
 
+@tracking_router.delete('/{pet_id}/{tracking_id}')
+async def delete_daily_tracking(user: Annotated[getAuthenticatedUser, Depends()], pet: Annotated[getPetData, Depends()], tracking_id: str, pet_collection: DbConnection):
+    """
+        Description:
+        Delete Daily Tracking Data
+
+        Path
+
+            - pet_id: Pet ID
+            - tracking_id: Tracking ID
+
+        Header
+
+            - authorization: token
+    """
+    if pet.get('_id') not in user.get('pet_ids'):
+        raise HTTPException(status_code=404, detail="Pet Not Found")
+
+    pet_collection.trackingCollection.delete_one({'_id': tracking_id})
+    return {
+        "status": "Deleted"
+    }
+
+@tracking_router.get('/{pet_id}/{tracking_id}')
+async def get_daily_tracking_by_id(user: Annotated[getAuthenticatedUser, Depends()], pet: Annotated[getPetData, Depends()], tracking_id: str, pet_collection: DbConnection):
+    """
+        Description:
+        Get Daily Tracking Data by ID
+
+        Path
+
+            - pet_id: Pet ID
+            - tracking_id: Tracking ID
+
+        Header
+
+            - authorization: token
+    """
+    if pet.get('_id') not in user.get('pet_ids'):
+        raise HTTPException(status_code=404, detail="Pet Not Found")
+
+    data = pet_collection.trackingCollection.find_one({'_id': tracking_id})
+    return data
