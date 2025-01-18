@@ -1,0 +1,1 @@
+from app.routers.api_v1.authenticated_user.pet.pet import pet_router

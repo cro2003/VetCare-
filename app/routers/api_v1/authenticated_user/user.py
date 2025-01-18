@@ -3,11 +3,12 @@ from typing import Annotated
 from app.dependencies import getAuthenticatedUser
 from app.routers.api_v1.authenticated_user.models import UpdateUserData
 from app.dependencies import DbConnection
+from app.routers.api_v1.authenticated_user.pet import pet_router
 
 authenticated_user_router = APIRouter()
-
+authenticated_user_router.include_router(pet_router, prefix='/pet', tags=['pet'])
 @authenticated_user_router.get('/profile')
-async def dashboard(user: Annotated[getAuthenticatedUser, Depends()]):
+async def profile(user: Annotated[getAuthenticatedUser, Depends()]):
     """
         Description:
         Show User Info

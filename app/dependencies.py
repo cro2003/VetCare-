@@ -1,7 +1,7 @@
 from typing import Annotated
 from fastapi import Depends, HTTPException, status
 from app.database import MongoConnection
-from fastapi import Header, Body
+from fastapi import Header, Body, Path
 from app.authentication import Autheticate
 
 DbConnection = Annotated[MongoConnection, Depends()]
@@ -31,3 +31,10 @@ def getAuthenticatedUser(authorization: Annotated[str, Header()]):
     if user_id:
         return getUserDataId(user_id, DbConnection())
     raise HTTPException(status_code=498, detail="Invalid Token")
+
+def getPetData(pet_id: Annotated[str, Path()], pet_collection: DbConnection):
+    pet = pet_collection.petsCollection.find_one({'_id': pet_id})
+    pet.get('dob')
+    if pet:
+        return pet
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Pet Not Found")
