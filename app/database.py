@@ -13,3 +13,4 @@ class MongoConnection():
         self.petsCollection = self.db['pets']
         self.trackingCollection = self.db['trackers']
         self.vet_historyCollection = self.db['vet_history']
+        self.remindersCollection = self.db['reminders']
