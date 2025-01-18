@@ -10,3 +10,4 @@ class MongoConnection():
     def initialize(self):
         self.UsersCollection = self.db['users']
         self.TokensCollection = self.db['tokens']
+        self.petsCollection = self.db['pets']

@@ -1,0 +1,1 @@
+from app.routers.api_v1.authenticated_user.user import authenticated_user_router
