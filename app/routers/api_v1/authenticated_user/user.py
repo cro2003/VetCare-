@@ -4,9 +4,11 @@ from app.dependencies import getAuthenticatedUser
 from app.routers.api_v1.authenticated_user.models import UpdateUserData
 from app.dependencies import DbConnection
 from app.routers.api_v1.authenticated_user.pet import pet_router
+from app.routers.api_v1.authenticated_user.tracking import tracking_router
 
 authenticated_user_router = APIRouter()
 authenticated_user_router.include_router(pet_router, prefix='/pet', tags=['pet'])
+authenticated_user_router.include_router(tracking_router, prefix='/test', tags=['tracking'])
 @authenticated_user_router.get('/profile')
 async def profile(user: Annotated[getAuthenticatedUser, Depends()]):
     """
