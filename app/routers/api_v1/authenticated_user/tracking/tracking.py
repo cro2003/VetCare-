@@ -64,9 +64,30 @@ async def get_daily_tracking(user: Annotated[getAuthenticatedUser, Depends()], p
         raise HTTPException(status_code=404, detail="Pet Not Found")
 
     data = pet_collection.trackingCollection.find({'pet_id': pet.get('_id')}).to_list()
-    return {
-        "daily_tracking": data
+    datas = data[:7]
+    dashboard_data = {
+        'daily_tracking': data,
+        'graph_diet': [],
+        'walking_graph': [],
+        'sleep_graph': [],
+        'avg_temp': 0,
+        'avg_weight': 0,
+        'avg_mood': 0,
+        'avg_water_intake': 0,
     }
+    for data in datas:
+        dashboard_data['graph_diet'].append({data.get('datentime'): len(data.get('diet'))})
+        dashboard_data['walking_graph'].append({data.get('datentime'): data.get('walking')})
+        dashboard_data['sleep_graph'].append({data.get('datentime'): data.get('sleep_time')})
+        dashboard_data['avg_temp'] += data.get('temperature')
+        dashboard_data['avg_weight'] += data.get('weight')
+        dashboard_data['avg_mood'] += data.get('mood_indicator')
+        dashboard_data['avg_water_intake'] += data.get('water_intake')
+    dashboard_data['avg_temp'] = dashboard_data['avg_temp'] / len(datas)
+    dashboard_data['avg_weight'] = dashboard_data['avg_weight'] / len(datas)
+    dashboard_data['avg_mood'] = dashboard_data['avg_mood'] / len(datas)
+    dashboard_data['avg_water_intake'] = dashboard_data['avg_water_intake'] / len(datas)
+    return dashboard_data
 
 @tracking_router.delete('/{pet_id}/{tracking_id}')
 async def delete_daily_tracking(user: Annotated[getAuthenticatedUser, Depends()], pet: Annotated[getPetData, Depends()], tracking_id: str, pet_collection: DbConnection):
@@ -111,3 +132,6 @@ async def get_daily_tracking_by_id(user: Annotated[getAuthenticatedUser, Depends
 
     data = pet_collection.trackingCollection.find_one({'_id': tracking_id})
     return data
+
+
+

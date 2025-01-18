@@ -34,7 +34,6 @@ def getAuthenticatedUser(authorization: Annotated[str, Header()]):
 
 def getPetData(pet_id: Annotated[str, Path()], pet_collection: DbConnection):
     pet = pet_collection.petsCollection.find_one({'_id': pet_id})
-    pet.get('dob')
     if pet:
         return pet
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Pet Not Found")
