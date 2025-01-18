@@ -15,6 +15,7 @@ class UserData(BaseModel):
     address: Annotated[str, Field(max_length=100)]
     vet_info: PersonalVetInfo
     pet_ids: Optional[List[str]] = Field(default=None)
+    reminder_ids: Optional[List[str]] = Field(default=None)
 
 class UserwithPass(UserData):
     password: str

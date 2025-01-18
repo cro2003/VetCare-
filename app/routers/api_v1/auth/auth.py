@@ -1,8 +1,9 @@
-from fastapi import Response, APIRouter
+from fastapi import Response, APIRouter, Body, HTTPException, status, Header
 from app.authentication import Autheticate
-from app.dependencies import DbConnection
+from app.dependencies import DbConnection, getUserData
 from app.routers.api_v1.auth.models import UserwithPass
 from bson.objectid import ObjectId
+from typing import Annotated
 
 auth_route = APIRouter()
 @auth_route.post('/signup', status_code=201)
@@ -32,3 +33,36 @@ async def signup(user: UserwithPass, user_collection: DbConnection, response: Re
     data = user.model_dump()
     data.update({'token': token})
     return data
+
+@auth_route.post('/login')
+async def login(username: Annotated[str, Body()], password: Annotated[str, Body()], response: Response):
+    """
+    Description:
+    Login Into the System
+
+    Request Body
+
+        - username: email address
+        - password: hash
+    """
+    user = getUserData(username, DbConnection())
+    if not (user['password'] == password):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Invalid Password")
+    a = Autheticate()
+    token = a.create_token(user['_id'])
+    response.headers['authorization'] = token
+    return {'token': token}
+
+@auth_route.get('/logout')
+async def logout(authorization: Annotated[str, Header()]):
+    """
+        Description:
+        Logout From the System
+
+        Header
+
+            - authorization: token
+    """
+    a = Autheticate()
+    a.delete_token(authorization)
+    return {'success': True}
