@@ -4,3 +4,6 @@ pymongo
 python-dotenv
 pydantic[email]
 google-generativeai
+reportlab
+matplotlib
+numpy

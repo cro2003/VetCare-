@@ -16,7 +16,7 @@ class DailyTrackingData(BaseModel):
     temperature: Annotated[float, Field(ge=1, description="Temperature in Celsius")]
     water_intake: Optional[float] = Field(ge=0, description="Water Intake in litre", default=None)
     walking: Optional[float] = Field(ge=0, description="Walking in KM", default=None)
-    behavior: Annotated[str, Field(max_length=30, description="Behavior of the Pet")]
+    behavior: Annotated[str, Field(max_length=100, description="Behavior of the Pet")]
     mood_indicator: Annotated[int, Field(ge=1, le=3, description="Mood Indicator from 3")]
     sleep_time: Optional[float] = Field(ge=0, description="Sleeping Time in Hour", default=None)
-    notes: Annotated[str, Field(max_length=100, description="Notes")]
+    notes: Annotated[str, Field(max_length=500, description="Notes")]
