@@ -29,7 +29,7 @@ async def chat_start(chatMessage: Annotated[ChatMessage, Body()], pet_info: Anno
             - message: User Message
     """
     print(pet_info)
-    t = TextGeneration(instruction=pet_info)
+    t = TextGeneration(instruction=pet_info, model=3)
     return t.start_chat(chatMessage.message)
 
 @chat_router.post('/{chat_id}')
