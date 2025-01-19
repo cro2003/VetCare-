@@ -1,0 +1,1 @@
+from app.routers.api_v1.chat.chat import chat_router

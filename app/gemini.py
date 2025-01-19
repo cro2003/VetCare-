@@ -9,10 +9,11 @@ chats_object = {
 
 }
 class TextGeneration:
-    def __init__(self, model=0, instruction="You are a Chatbot and can only help using Text Generation"):
-        # instruction = "You are a Chatbot and can only help using Text Generation, "
-        # "you have to strictly respond in json format without any text formatting for every chat"
-        # "like {'result': 'YOUR_REPLY'}"
+    def __init__(self, model=0, instruction=None):
+        if instruction:
+            instruction = f"You are a Chatbot and you are a AI Veterinary Assistant & users for the Health Issues of their Pet, Do not go Offrelevant to the Veterinary. For this instance here's some Information about the pet: {instruction}"
+        else:
+            instruction = f"You are a Chatbot and you are a AI Veterinary Assistant & users for the Health Issues of their Pet, Do not go Offrelevant to the Veterinary"
         self.models = {
             0: 'gemini-1.5-flash',
             1: 'gemini-1.5-pro',
